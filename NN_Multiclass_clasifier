@@ -1,3 +1,5 @@
+
+# Import libraries
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -9,14 +11,15 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
 # 1. Data Preparation
-# Assuming you have your data in a CSV format
+# Excel file with proteomic data in a CSV format
 file_path = 'C:/Users/a121160/OneDrive - Eviden/Documents/Proyecto/ELMUMY/WPs/WP4/DATA/InputNN_all.xlsx'
+# Adapting the numeric format 
 data = pd.read_excel(file_path, decimal=',', header=None)
 
-# Extract features and labels
-X = data.iloc[:, :3000].values
-labels = ['MGUS']*16 + ['sMM']*12 + ['MM']*15
-y = np.array([0]*16 + [1]*16 + [2]*12)
+# Extract features and labels: Three types of samples: MGUS, sMM and MM, (proteomic data with 2995 features)
+X = data.iloc[:, :2995].values
+# labels = ['MGUS']*16 + ['sMM']*12 + ['MM']*15 (
+y = np.array([0]*16 + [1]*12 + [2]*15)
 
 # Normalize the data
 scaler = StandardScaler()
@@ -24,7 +27,7 @@ X = scaler.fit_transform(X)
 
 # Convert to PyTorch tensors
 X = torch.tensor(X, dtype=torch.float32)
-y = torch.tensor(y, dtype=torch.long)  # Assuming y is a classification label
+y = torch.tensor(y, dtype=torch.long)  # y is the classification label
 
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=44)
